@@ -24,3 +24,15 @@ Models/Camera.pyc
 Utils/log.pyc
 
 Views/vodView.pyc
+
+Views/tkSimpleStatusBar.pyc
+
+Views/__init__.pyc
+
+Utils/__init__.pyc
+
+Utils/Config.pyc
+
+Models/__init__.pyc
+
+Controller/__init__.pyc
