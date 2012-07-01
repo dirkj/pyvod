@@ -15,7 +15,7 @@ class Camera (object):
 
 	def __init__ (self):
 		self.log = logging.getLogger(__name__)
-		self.resetCache()
+		self.resetCaches()
 		self.timeout = 3
 		self.tmpfilename = self.config.get('camera', 'tmpfile')
 		self.baseurl = self.config.get('camera', 'baseurl') + '/'
@@ -61,13 +61,14 @@ class Camera (object):
 		self.log.debug('Got image: format=' + img.format + ', size=' + str(img.size[0]) + 'x' + str(img.size[1]) + ', mode=' + img.mode)
 		return img
 
-	def resetCache(self):
+	def resetCaches(self):
 		self.paramsCached = False
+		self.configsCached = False
 
 	def getParams(self):
 		if not self.paramsCached:
-			getparamsurl = self.baseurl + self.config.get('camera','command.getparam') + '&' + self.userpwd_urlpar
-			uf = urllib2.urlopen(getparamsurl, timeout=2*self.timeout)
+			getparamsurl = self.baseurl + self.config.get('camera','command.getparam') + '?' + self.userpwd_urlpar
+			uf = urllib2.urlopen(getparamsurl, timeout=self.timeout)
 			self.params = re.findall(r'var\s+([a-zA-Z_][a-zA-Z_0-9]*)\s*=\s*(.*);', uf.read())
 			uf.close()
 			# --> result ist ein array mit key/value pairs
@@ -82,13 +83,38 @@ class Camera (object):
 				return tuple[1]
 		return 0
 
+	def getConfigs(self):
+		if not self.configsCached:
+			getparamsurl = self.baseurl + self.config.get('camera','command.getconfig') + '?' + self.userpwd_urlpar
+			uf = urllib2.urlopen(getparamsurl, timeout=self.timeout)
+			self.configs = re.findall(r'var\s+([a-zA-Z_][a-zA-Z_0-9]*)\s*=\s*(.*);', uf.read())
+			uf.close()
+			# --> result ist ein array mit key/value pairs
+			self.log.info('Got fresh configs from camera')
+		return self.configs
+
+	def getConfig(self, param):
+		self.getConfigs()
+		for tuple in self.configs:
+			if tuple[0] == param:
+				self.log.debug('Camera.getConfig(' + param + ')=' + tuple[1])
+				return tuple[1]
+		return 0
+
 	def moveCamera(self, moveCommand):
 		uf = urllib2.urlopen(self.baseurl + self.config.get('camera',moveCommand) + '&' + self.userpwd_urlpar, timeout=self.timeout)
 		uf.close()
+		self.log.debug("moveCamera - moveCommand=%s" % moveCommand)
 
 	def moveRight(self):
 		self.moveCamera('command.moveright')
 
 	def moveLeft(self):
 		self.moveCamera('command.moveleft')
+
+	def moveUp(self):
+		self.moveCamera('command.moveup')
+
+	def moveDown(self):
+		self.moveCamera('command.movedown')
 

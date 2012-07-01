@@ -18,3 +18,9 @@ Resources/config.ini
 
 tmp/camera.jpg
 
+
+Models/Camera.pyc
+
+Utils/log.pyc
+
+Views/vodView.pyc

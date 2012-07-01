@@ -8,9 +8,9 @@ class ActionController:
 	'''VOD Action Controller
 	'''
 	
-	def __init__(self, root):
+	def __init__(self, tkroot):
 		self.log = logging.getLogger(__name__)
-		self.root = root
+		self.tkroot = tkroot
 		self.view = None
 		self.camera = Models.Camera.Camera()
 
@@ -27,7 +27,7 @@ class ActionController:
 			self.view.log_add("running")
 			self.view.setStatus("running")		
 			self.inPausedState = False
-			self.root.after(self.updateInterval, self.updateLivePicture)
+			# self.tkroot.after(self.updateInterval, self.updateLivePicture)
 		else:
 			self.view.log_add("paused")
 			self.view.setStatus("paused")		
@@ -35,15 +35,32 @@ class ActionController:
 		return not self.inPausedState
 		
 	def showCameraParamAction(self):
+		self.camera.resetCaches()
 		params = self.camera.getParams()
 		for tuple in params:
 			self.view.log_add('- ' + tuple[0] + ': ' + tuple[1])
 
+	def showCameraConfigAction(self):
+		self.camera.resetCaches()
+		params = self.camera.getConfigs()
+		for tuple in params:
+			self.view.log_add('- ' + tuple[0] + ': ' + tuple[1])
+
 	def cameraTurnLeft(self):
-		self.view.log_add("camera turn left - nyi")
+		self.view.log_add("camera turn left")
+		self.camera.moveLeft()
 
 	def cameraTurnRight(self):
-		self.view.log_add("camera turn right - nyi")
+		self.view.log_add("camera turn right")
+		self.camera.moveRight()
+
+	def cameraTurnUp(self):
+		self.view.log_add("camera turn up")
+		self.camera.moveUp()
+
+	def cameraTurnDown(self):
+		self.view.log_add("camera turn down")
+		self.camera.moveDown()
 
 	def updateLivePicture(self):
 		now = time.strftime("%H:%M:%S")
@@ -53,7 +70,7 @@ class ActionController:
 		else:
 			self.view.setStatus("Paused - no picture taken at %s", now)
 
-		self.root.after(self.updateInterval, self.updateLivePicture)
+		self.tkroot.after(self.updateInterval, self.updateLivePicture)
 		self.log.debug('set callback to return after ' + str(self.updateInterval) + 'ms')
 		return True               # continue calls if this is a callback of the idle loop
 
