@@ -62,6 +62,34 @@ class ActionController:
 		self.view.log_add("camera turn down")
 		self.camera.moveDown()
 
+	def cameraMoveCenter(self):
+		self.view.log_add("camera move to center position")
+		self.camera.moveCenter()
+
+	def cameraMoveToPosition1(self):
+		self.view.log_add("camera move to stored position 1")
+		self.camera.moveToPosition1()
+
+	def cameraMoveToPosition2(self):
+		self.view.log_add("camera move to stored position 2")
+		self.camera.moveToPosition2()
+
+	def cameraMoveToPosition3(self):
+		self.view.log_add("camera move to stored position 3")
+		self.camera.moveToPosition3()
+
+	def saveCurrentPositionAsPos1(self):
+		self.view.log_add("save current position as position #1")
+		self.camera.setPositionAsPos1()
+
+	def saveCurrentPositionAsPos2(self):
+		self.view.log_add("save current position as position #2")
+		self.camera.setPositionAsPos2()
+
+	def saveCurrentPositionAsPos3(self):
+		self.view.log_add("save current position as position #3")
+		self.camera.setPositionAsPos3()
+
 	def updateLivePicture(self):
 		now = time.strftime("%H:%M:%S")
 		if not self.inPausedState:
@@ -73,4 +101,12 @@ class ActionController:
 		self.tkroot.after(self.updateInterval, self.updateLivePicture)
 		self.log.debug('set callback to return after ' + str(self.updateInterval) + 'ms')
 		return True               # continue calls if this is a callback of the idle loop
+
+	def changeBrightness(self, newBrightness):
+		self.camera.setBrightness(newBrightness)
+
+	def changeContrast(self, newContrast):
+		self.camera.setContrast(newContrst)
+
+
 

@@ -64,13 +64,13 @@ class VODView:
 		livepicture_canvas.grid(row=0, column=0, sticky=W)
 		
 		# CAM Toolbar
-		cam_toolbar = Frame(frame)
-		b = Button(cam_toolbar, text="Pause", command=self.actionController.pauseAction)
+		cam_toolbar = self.create_camera_toolbar(frame) # Frame(frame)
 		# b = Button(cam_toolbar, text="Pause", command=self.actionController.pauseAction)
-		b.pack(side=LEFT, padx=2, pady=2)
+		# b = Button(cam_toolbar, text="Pause", command=self.actionController.pauseAction)
+		# b.pack(side=LEFT, padx=2, pady=2)
 
-		b = Button(cam_toolbar, text="Camera Param", command=self.actionController.showCameraParamAction)
-		b.pack(side=LEFT, padx=2, pady=2)
+		# b = Button(cam_toolbar, text="Camera Param", command=self.actionController.showCameraParamAction)
+		# b.pack(side=LEFT, padx=2, pady=2)
 
 		cam_toolbar.grid(row=1, column=0, sticky=W)
 		
@@ -100,7 +100,7 @@ class VODView:
 		menubar.add_cascade(label="VOD", menu=vodmenu)
 		#
 		cameramenu = Menu(menubar, tearoff=0)
-		cameramenu.add_command(label="Pause", command=self.actionController.pauseAction)
+		cameramenu.add_command(label="Pause/Run", command=self.togglePauseRun)
 		cameramenu.add_command(label="Parameter", command=self.actionController.showCameraParamAction)
 		cameramenu.add_command(label="Turn left", command=self.actionController.cameraTurnLeft)
 		cameramenu.add_command(label="Turn right", command=self.actionController.cameraTurnRight)
@@ -127,11 +127,56 @@ class VODView:
 		self.logview.see(END)
 		self.log.debug("Logview: " + message)
 		
+	def create_camera_toolbar(self, master):
+		camera_toolbar = Frame(master, background="GREY")
+
+		# Postions Toolbar
+		toolbar = Frame(camera_toolbar, background="GREY")
+		b = Button(toolbar, text="Move to #1", command=self.actionController.cameraMoveToPosition1)
+		b.pack(side=LEFT, padx=2, pady=2)
+
+		b = Button(toolbar, text="Move to #2", command=self.actionController.cameraMoveToPosition2)
+		b.pack(side=LEFT, padx=2, pady=2)
+
+		b = Button(toolbar, text="Move to #3", command=self.actionController.cameraMoveToPosition3)
+		b.pack(side=LEFT, padx=2, pady=2)
+
+		b = Button(toolbar, text="Store #1", command=self.actionController.saveCurrentPositionAsPos1)
+		b.pack(side=LEFT, padx=2, pady=2)
+
+		b = Button(toolbar, text="Store #2", command=self.actionController.saveCurrentPositionAsPos2)
+		b.pack(side=LEFT, padx=2, pady=2)
+
+		b = Button(toolbar, text="Store #3", command=self.actionController.saveCurrentPositionAsPos3)
+		b.pack(side=LEFT, padx=2, pady=2)
+
+		toolbar.pack(side=TOP, fill=X)
+
+		# Config Toolbar
+		toolbar = Frame(camera_toolbar, background="GREY")
+		l = Label(toolbar, text="Brightness")
+		l.pack(side=LEFT, padx=2, pady=2)
+		w = Scale(toolbar, from_=0, to=15, orient=HORIZONTAL, command=self.changeBrightness)
+		w.pack(side=LEFT, padx=2, pady=2)
+		self.brightnessScale = w
+
+		l = Label(toolbar, text="Contrast")
+		l.pack(side=LEFT, padx=2, pady=2)
+		w = Scale(toolbar, from_=0, to=6, orient=HORIZONTAL, command=self.changeContrast)
+		w.pack(side=LEFT, padx=2, pady=2)
+		self.contrastScale = w
+
+		toolbar.pack(side=TOP, fill=X)
+
+		camera_toolbar.pack(side=TOP, fill=X)
+		return camera_toolbar
+
 	def create_toolbar(self, master):
 		# TOOLBAR
 		toolbar = Frame(master, background="WHITE")
-		b = Button(toolbar, text="Pause", command=self.actionController.pauseAction)
+		b = Button(toolbar, text="Pause", command=self.togglePauseRun)
 		b.pack(side=LEFT, padx=2, pady=2)
+		self.pauseRunButton = b
 
 		b = Button(toolbar, text="Camera Param", command=self.actionController.showCameraParamAction)
 		b.pack(side=LEFT, padx=2, pady=2)
@@ -151,8 +196,25 @@ class VODView:
 		b = Button(toolbar, text="Turn Down", command=self.actionController.cameraTurnDown)
 		b.pack(side=LEFT, padx=2, pady=2)
 
+		b = Button(toolbar, text="Move to Center", command=self.actionController.cameraMoveCenter)
+		b.pack(side=LEFT, padx=2, pady=2)
+
 		toolbar.pack(side=TOP, fill=X)
 		return toolbar
+
+	def togglePauseRun(self):
+		self.actionController.pauseAction()
+		if self.actionController.inPausedState:
+			self.pauseRunButton["text"]="Run"
+		else:
+			self.pauseRunButton["text"]="Pause"
+
+	def changeBrightness(self, par2):
+		self.actionController.changeBrightness(self.brightnessScale.get())
+
+	def changeContrast(self, par2):
+		self.actionController.changeContrst(self.contrastScale.get())
+
 
 	def say_hi(self):
 		self.log_add("hi")
