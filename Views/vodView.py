@@ -160,6 +160,6 @@ class VODView:
 		self.log_add("hi")
 
 	def setStatus(self, format, *args):
-		self.status.set(format, args)
-		self.log.debug("setStatus to " + format, args)
+		self.status.set(format % args)
+		self.log.debug(("setStatus to " + format) % args)
 

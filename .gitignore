@@ -1,3 +1,7 @@
+#project specific files
+Resources/config.ini
+tmp/camera.jpg
+
 #python specific
 *.pyc
 *.egg

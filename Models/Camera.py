@@ -5,7 +5,8 @@ import urllib2
 from datetime import datetime,date
 import time
 import Utils.Config
-import Utils.log as Log
+import logging
+import socket
 
 class Camera (object):
 	"Oeffnet und liest Bilder einer Kamera"
@@ -13,7 +14,7 @@ class Camera (object):
 	config = Utils.Config.Config()
 
 	def __init__ (self):
-		self.log = Log.get_logger(__name__)
+		self.log = logging.getLogger(__name__)
 		self.resetCache()
 		self.timeout = 3
 		self.tmpfilename = self.config.get('camera', 'tmpfile')
@@ -24,7 +25,7 @@ class Camera (object):
 		self.userpwd_urlpar = "user="+user+"&pwd="+password
 
 		self.getcmd = self.baseurl + command_get + '?' + self.userpwd_urlpar
-		# print "Loading ", self.urlcmd, "to", self.tmpfilename
+		self.log.debug("Loading " + self.getcmd + " to " + self.tmpfilename)
 
 	def getImage(self):
 		img = None
@@ -39,14 +40,25 @@ class Camera (object):
 			of.write(image)
 			of.close()
 			f.close()
- 			img = Image.open(self.tmpfilename)
-			self.log.debug('Got image: format=' + img.format + ', size=' + str(img.size[0]) + 'x' + str(img.size[1]) + ', mode=' + img.mode)
- 			# print datetime.now().isoformat(), self.getcmd, img.format, "%dx%d" % img.size, img.mode
+
+		except urllib2.URLError, e:
+			self.log.warn('Timeout occured while trying to grab a new image from the camera')
+
+		except urllib2.URLError, e:
+			if isinstance(e.reason, socket.timeout):
+				self.log.warn('Timeout occured while trying to grab a new image from the camera')
+			else:
+				raise
 
 		except IOError, e:
- 			print "IOError:", e.reason, infile
+			if isinstance(e, socket.timeout):
+				self.log.warn('Timeout occured while trying to grab a new image from the camera')
+			else:
+	 			self.log.error("IOError: " + e.reason + " (" + infile + ")")
  			pass
 
+		img = Image.open(self.tmpfilename)
+		self.log.debug('Got image: format=' + img.format + ', size=' + str(img.size[0]) + 'x' + str(img.size[1]) + ', mode=' + img.mode)
 		return img
 
 	def resetCache(self):
