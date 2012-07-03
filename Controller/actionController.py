@@ -40,6 +40,12 @@ class ActionController:
 		for tuple in params:
 			self.view.log_add('- ' + tuple[0] + ': ' + tuple[1])
 
+	def showCameraExtParamAction(self):
+		self.camera.resetCaches()
+		params = self.camera.getExtParams()
+		for tuple in params:
+			self.view.log_add('- ' + tuple[0] + ': ' + tuple[1])
+
 	def showCameraConfigAction(self):
 		self.camera.resetCaches()
 		params = self.camera.getConfigs()

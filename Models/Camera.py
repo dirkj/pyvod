@@ -63,6 +63,7 @@ class Camera (object):
 
 	def resetCaches(self):
 		self.paramsCached = False
+		self.extParamsCached = False
 		self.configsCached = False
 
 	def getParams(self):
@@ -98,6 +99,24 @@ class Camera (object):
 		for tuple in self.configs:
 			if tuple[0] == param:
 				self.log.debug('Camera.getConfig(' + param + ')=' + tuple[1])
+				return tuple[1]
+		return 0
+
+	def getExtParams(self):
+		if not self.extParamsCached:
+			getparamsurl = self.baseurl + self.config.get('camera','command.getextparam') + '?' + self.userpwd_urlpar
+			uf = urllib2.urlopen(getparamsurl, timeout=self.timeout)
+			self.extParams = re.findall(r'var\s+([a-zA-Z_][a-zA-Z_0-9]*)\s*=\s*(.*);', uf.read())
+			uf.close()
+			# --> result ist ein array mit key/value pairs
+			self.log.info('Got fresh ext-params from camera')
+		return self.extParams
+
+	def getExtParam(self, param):
+		self.getExtParams()
+		for tuple in self.extParams:
+			if tuple[0] == param:
+				self.log.debug('Camera.getExtParam(' + param + ')=' + tuple[1])
 				return tuple[1]
 		return 0
 

@@ -184,6 +184,9 @@ class VODView:
 		b = Button(toolbar, text="Camera Config", command=self.actionController.showCameraConfigAction)
 		b.pack(side=LEFT, padx=2, pady=2)
 
+		b = Button(toolbar, text="Camera Ext-Params", command=self.actionController.showCameraExtParamAction)
+		b.pack(side=LEFT, padx=2, pady=2)
+
 		b = Button(toolbar, text="Turn left", command=self.actionController.cameraTurnLeft)
 		b.pack(side=LEFT, padx=2, pady=2)
 
