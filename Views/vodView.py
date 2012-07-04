@@ -4,6 +4,7 @@ from Tkinter import *
 from Views.tkSimpleStatusBar import *
 from PIL import Image, ImageTk
 import Utils.log as Log
+import schemaView
 
 class VODView:
 	'''VOD view componenten managing all visual elements of the VOD main window.
@@ -14,9 +15,10 @@ class VODView:
 	* set_status(format, args) sets the status bar using formatted print
 	'''
 	
-	def __init__(self, master, actionController):
+	def __init__(self, master, actionController = None, schemaController = None):
 		self.log = Log.get_logger(__name__)
 		self.setActionController(actionController)
+		self.setSchemaController(schemaController)
 		self.menubar = self.create_menubar(master)
 		self.toolbar = self.create_toolbar(master)
 
@@ -34,6 +36,9 @@ class VODView:
 	def setActionController(self, actionController):
 		self.actionController = actionController
 		self.log.debug('View initialized with actionController')
+		
+	def setSchemaController(self, schemaController):
+		self.schemaController = schemaController
 		
 	def set_photo_from_image(self, image):
 		self.set_photo(ImageTk.PhotoImage(image))
@@ -75,8 +80,9 @@ class VODView:
 		cam_toolbar.grid(row=1, column=0, sticky=W)
 		
 		# Schema
-		schemapic = Canvas(frame, width=640, height=240, background="green")
-		schemapic.grid(row=2, column=0, sticky=W)
+		self.schemaView = schemaView.SchemaView(frame, width=640, height=240, background="green", schemaController=self.schemaController)
+
+		self.schemaView.canvas.grid(row=2, column=0, sticky=W)
 		
 		# Logview
 		self.logview.grid(row=0, column=1, rowspan=3, sticky=W+E+N+S)
@@ -216,7 +222,7 @@ class VODView:
 		self.actionController.changeBrightness(self.brightnessScale.get())
 
 	def changeContrast(self, par2):
-		self.actionController.changeContrst(self.contrastScale.get())
+		self.actionController.changeContrast(self.contrastScale.get())
 
 
 	def say_hi(self):
@@ -225,4 +231,7 @@ class VODView:
 	def setStatus(self, format, *args):
 		self.status.set(format % args)
 		self.log.debug(("setStatus to " + format) % args)
+
+	def getSchemaView(self):
+		return self.schemaView
 

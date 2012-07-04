@@ -18,6 +18,10 @@ class ActionController:
 		self.updateInterval = self.camera.config.getint('vod','updateInterval')
 		self.log.debug("ActionController started, updateInterval=%d" % self.updateInterval)
 
+		# TODO: create instance of schemaController and pass to vodView and schemaView
+		# self.schemaController = schemaController.SchemaController()
+		
+
 	def setView(self, view):
 		self.view = view
 		self.log.debug('Action Controller initialized with view')
@@ -112,7 +116,7 @@ class ActionController:
 		self.camera.setBrightness(newBrightness)
 
 	def changeContrast(self, newContrast):
-		self.camera.setContrast(newContrst)
+		self.camera.setContrast(newContrast)
 
 
 

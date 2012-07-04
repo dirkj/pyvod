@@ -171,7 +171,7 @@ class Camera (object):
 		self.moveCamera('command.setpos3')
 
 	def setBrightness(self, newBrightness):
-		self.moveCamera('command.setbrightness' % (newBrightness << self.config.getint('command.setbrightness_bitshift')))
+		self.moveCamera('command.setbrightness' % (newBrightness << self.config.getint('camera', 'command.setbrightness_bitshift')))
 
 	def setContrast(self, newContrast):
 		self.moveCamera('command.setcontrast' % newContrast)

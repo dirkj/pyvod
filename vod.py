@@ -6,7 +6,9 @@ from Tkinter import *
 import time
 import Utils.Config
 import Views.vodView
+import Views.schemaView
 import Controller.actionController
+import Controller.schemaController
 import logging, logging.config
 
 class VOD(object):       
@@ -23,7 +25,10 @@ class VOD(object):
 	    self.actionController.setView(self.view)
 	    self.view.setStatus("Application started %s", time.strftime("%Y-%m-%d %H:%M:%S"))
 
+	    self.schemaController = Controller.schemaController.SchemaController(self.view.getSchemaView())
+
 	    self.actionController.updateLivePicture()
+	    self.schemaController.drawSchema()
 	    self.root.mainloop()
 	    self.log.debug("stopping application ...")
             
