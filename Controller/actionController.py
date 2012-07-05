@@ -118,5 +118,8 @@ class ActionController:
 	def changeContrast(self, newContrast):
 		self.camera.setContrast(newContrast)
 
+	def startTest(self):
+		self.log.debug("Test action called")
+		self.view.schemaView.updateTrackStatus("track1", True)
 
 

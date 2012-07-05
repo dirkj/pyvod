@@ -114,6 +114,10 @@ class VODView:
 		cameramenu.add_command(label="Turn down", command=self.actionController.cameraTurnDown)
 		menubar.add_cascade(label="Camera", menu=cameramenu)
 		#
+		testmenu = Menu(menubar, tearoff=0)
+		testmenu.add_command(label="Test1", command=self.actionController.startTest)
+		menubar.add_cascade(label="Test", menu=testmenu)
+		#
 		helpmenu = Menu(menubar, tearoff=0)
 		helpmenu.add_command(label="About", command=self.say_hi)
 		menubar.add_cascade(label="Help", menu=helpmenu)
