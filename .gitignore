@@ -25,3 +25,23 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+=======
+#python specific
+*.pyc
+*.egg
+ 
+## generic files to ignore
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
+*.log
+*.bak
+*.tmp
+
+#project specific files
+
+Resources/config.ini
+
+tmp/camera.jpg
