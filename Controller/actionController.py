@@ -18,9 +18,6 @@ class ActionController:
 		self.updateInterval = self.camera.config.getint('vod','updateInterval')
 		self.log.debug("ActionController started, updateInterval=%d" % self.updateInterval)
 
-		# TODO: create instance of schemaController and pass to vodView and schemaView
-		# self.schemaController = schemaController.SchemaController()
-		
 
 	def setView(self, view):
 		self.view = view
@@ -113,13 +110,19 @@ class ActionController:
 		return True               # continue calls if this is a callback of the idle loop
 
 	def changeBrightness(self, newBrightness):
-		self.camera.setBrightness(newBrightness)
+		self.camera.setBrightness(int(newBrightness))
 
 	def changeContrast(self, newContrast):
-		self.camera.setContrast(newContrast)
+		self.camera.setContrast(int(newContrast))
+
+	def getBrightness(self):
+		return self.camera.getBrightness()
+
+	def getContrast(self):
+		return self.camera.getContrast()
 
 	def startTest(self):
 		self.log.debug("Test action called")
-		self.view.schemaView.updateTrackStatus("track1", True)
+		self.view.schemaView.updateTrackStatus("track05", True)
 
 

@@ -167,12 +167,14 @@ class VODView:
 		l = Label(toolbar, text="Brightness")
 		l.pack(side=LEFT, padx=2, pady=2)
 		w = Scale(toolbar, from_=0, to=15, orient=HORIZONTAL, command=self.changeBrightness)
+		w.set(self.actionController.getBrightness())
 		w.pack(side=LEFT, padx=2, pady=2)
 		self.brightnessScale = w
 
 		l = Label(toolbar, text="Contrast")
 		l.pack(side=LEFT, padx=2, pady=2)
 		w = Scale(toolbar, from_=0, to=6, orient=HORIZONTAL, command=self.changeContrast)
+		w.set(self.actionController.getContrast())
 		w.pack(side=LEFT, padx=2, pady=2)
 		self.contrastScale = w
 

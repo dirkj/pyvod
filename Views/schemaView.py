@@ -19,15 +19,15 @@ class SchemaView:
 			self.setSchemaController(schemaController)
                 self.canvas = Canvas(tkparent, width=self.width, height=self.height, background="green")
 		self.colors = dict()
+		self.drawingElements = []
+		# self.addDrawingTestData()	# remove if we can load drawing data from file
+
+	def addDrawingTestData(self):
 		self.addColorDef("__default", "black")
 		self.addColorDef("__occupiedColor", "red")
 		self.addColorDef("col1", "white")
 		self.addColorDef("bgcol", "black")
 		self.addColorDef("textcol", "white")
-		self.drawingElements = []
-		self.addDrawingTestData()	# remove if we can load drawing data from file
-
-	def addDrawingTestData(self):
 		self.addLine(10, 100, 600, 100, "col1", 2, "track1")
 		self.addCircle(600, 100, 4, "col1", 1)
 		self.addText(200, 100, "test track", "textcol")
@@ -63,7 +63,9 @@ class SchemaView:
 	def updateTrackStatus(self, track, isOccupied):
 		self.log.debug("updateTrackStatus for track=" + track + ", setting isOccupied=" + str(isOccupied))
 		for dE in self.drawingElements:
+			self.log.debug("## checking element %s: x1=%s, y1=%s, track=%s" % (dE["type"], dE["x1"], dE["y1"], dE["track"]))
 			if "track" in dE and dE["track"] == track:
+				self.log.debug("-- found element %s: x1=%s, y1=%s" % (dE["type"], dE["x1"], dE["y1"]))
 				if isOccupied:
 					dE["currentStateColor"] = "__occupiedColor"
 				else:
@@ -74,14 +76,14 @@ class SchemaView:
 	def draw(self):
 		for dE in self.drawingElements:
 			if dE["type"] == "line":
-				self.log.debug("draw line from %d,%d to %d,%d, color=%s", dE["x1"], dE["y1"], dE["x2"], dE["y2"], dE["currentStateColor"])
+				self.log.debug("draw line from %s,%s to %s,%s, color=%s", dE["x1"], dE["y1"], dE["x2"], dE["y2"], dE["currentStateColor"])
 				self.canvas.create_line(dE["x1"], dE["y1"], dE["x2"], dE["y2"], width=dE["width"], fill=self.getColorDef(dE["currentStateColor"])) 
 			if dE["type"] == "rectangle":
-				self.log.debug("draw rectangle from %d,%d to %d,%d", dE["x1"], dE["y1"], dE["x2"], dE["y2"])
+				self.log.debug("draw rectangle from %s,%s to %s,%s", dE["x1"], dE["y1"], dE["x2"], dE["y2"])
 				self.canvas.create_rectangle(dE["x1"], dE["y1"], dE["x2"], dE["y2"], width=dE["width"], fill=self.getColorDef(dE["currentStateColor"]), outline=self.getColorDef(dE["currentStateColor"])) 
 			if dE["type"] == "circle":
-				self.log.debug("draw circle at %d,%d with radius %d", dE["x1"], dE["y1"], dE["r"])
-				self.canvas.create_oval(dE["x1"] - dE["r"], dE["y1"] - dE["r"], dE["r"] + dE["x1"], dE["r"] + dE["y1"], width=dE["width"], fill=self.getColorDef(dE["currentStateColor"]), outline=self.getColorDef(dE["currentStateColor"])) 
+				self.log.debug("draw circle at %s,%s with radius %s", dE["x1"], dE["y1"], dE["r"])
+				self.canvas.create_oval(int(dE["x1"]) - int(dE["r"]), int(dE["y1"]) - int(dE["r"]), int(dE["r"]) + int(dE["x1"]), int(dE["r"]) + int(dE["y1"]), width=dE["width"], fill=self.getColorDef(dE["currentStateColor"]), outline=self.getColorDef(dE["currentStateColor"])) 
 			if dE["type"] == "text":
-				self.log.debug("draw text at %d,%d with content %s", dE["x1"], dE["y1"], dE["text"])
+				self.log.debug("draw text at %s,%s with content %s", dE["x1"], dE["y1"], dE["text"])
 				self.canvas.create_text(dE["x1"], dE["y1"], anchor="sw", text=dE["text"], fill=self.getColorDef(dE["text_color"])) 

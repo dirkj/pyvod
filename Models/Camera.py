@@ -121,19 +121,21 @@ class Camera (object):
 		return 0
 
 	def getBrightness(self):
-		if not self.configsCached:
-			self.getConfigs()
-		brightness = int(self.getConfig('brightness')) >> self.config.getint('command.setbrightness_bitshift')
+		self.getConfigs()
+		brightness = int(self.getConfig('brightness')) >> self.config.getint('camera', 'command.setbrightness_bitshift')
+		self.log.debug('getBrightness: Camera gives %d as brightness value', brightness)
 		return brightness
 
 	def getContrast(self):
-		if not self.configsCached:
-			self.getConfigs()
+		self.getConfigs()
 		contrast = int(self.getConfig('contrast'))
+		self.log.debug('getContrast: Camera gives %d as contrast value', contrast)
 		return contrast
 
-	def moveCamera(self, moveCommand):
-		uf = urllib2.urlopen(self.baseurl + self.config.get('camera',moveCommand) + '&' + self.userpwd_urlpar, timeout=self.timeout)
+	def moveCamera(self, moveCommand, param=None):
+		cmd_format = self.config.get('camera',moveCommand)
+		cmd = cmd_format % param
+		uf = urllib2.urlopen(self.baseurl + cmd + '&' + self.userpwd_urlpar, timeout=self.timeout)
 		uf.close()
 		self.log.debug("moveCamera - moveCommand=%s" % moveCommand)
 
@@ -171,8 +173,8 @@ class Camera (object):
 		self.moveCamera('command.setpos3')
 
 	def setBrightness(self, newBrightness):
-		self.moveCamera('command.setbrightness' % (newBrightness << self.config.getint('camera', 'command.setbrightness_bitshift')))
+		self.moveCamera('command.setbrightness', (int(newBrightness) << self.config.getint('camera', 'command.setbrightness_bitshift')))
 
 	def setContrast(self, newContrast):
-		self.moveCamera('command.setcontrast' % newContrast)
+		self.moveCamera('command.setcontrast', newContrast)
 
