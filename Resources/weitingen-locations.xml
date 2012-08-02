@@ -1,0 +1,17 @@
+<station name="Weitingen">
+	<geometry units="mm">
+		<polygon>
+			<point x="0" y="0" />
+			<point x="1600" y="0" />
+			<point x="1600" y="350" />
+			<point x="-350" y="350"
+			<point x="-500" y="100" />
+			<point x="-450" y="-100" />
+			<point x="-150" y="0" />
+		</polygon>
+	</geometry>
+	<calibration_locations>
+		<calibration_led id="calib01" x="50" y="330" switch="1" />
+		<calibration_led id="calib02" x="1500" y="30" switch="2" />
+	</calibration_locations>
+</station>

@@ -1,0 +1,633 @@
+Kamera bewegen:
+----------------------------------------------------------------------------
+decoder_control.cgi
+Description: decoder control
+Permission: operator
+Grammar: /decoder_control.cgi?command=[&onestep=&degree=&user=&pwd=&next_url=]
+Parameter:
+onestep=1: indicate the PTZ control is one step then stop:it is only for camera with ptz originally and it is only for up ,down,left and right.
+Degree: onestep device operator degree
+Command: decoder control command
+
+Value Internal motor
+0 up 
+1 stop up 
+2 down 
+3 stop down 
+4 left 
+5 stop left 
+6 right 
+7 stop right 
+_____________________________
+8 Small aperture
+9 Stop small aperture
+10 Large aperture
+11 Stop large aperture
+12 Focus close
+13 Stop focus close
+14 Focus far
+15 Stop focus far
+16 Zoom close
+17 Stop zoom close
+18 Zoom far
+19 Stop zoom far
+20 Auto patrol
+21 Stop auto patro
+22 Close switch 1
+23 Disconnect switch1
+24 Close switch 2
+_________________________________
+25 center
+26 Up & down patrol
+27 Stop up & down patrol
+28 Left & right patrol
+29 Stop Left & right patrol
+30 Set preset 1
+31 Go to preset 1
+… …
+60 Set preset 16
+61 Go to preset 16
+… …
+90 Upper left
+91 Upper right
+92 Down left
+93 Down right
+94 Io output high
+95 Io output low
+255 Motor test mode
+
+
+Kameraeinstellungen ändern:
+----------------------------------------------------------------------------
+Camera_control.cgi
+Description: to control camera sensor
+param Permission:Operator
+Grammar: /camera_control.cgi?param=&value=[&user=&pwd=&next_url=]
+
+Param
+param: param type
+value: param value
+
+param value
+0:resolution 
+    2: qqvga
+    8: qvga
+    32: vga
+1: brightness 0~255
+2: contrast 0~6
+3:mode
+    0: 50hz
+    1: 60hz
+    2: outdoor
+5: patrol
+    0: initial
+    1: vertical patrol
+    2: horizontal patrol
+    3: vertical patrol + horizontal patrol
+
+Kameraeinstellungen lesen:
+----------------------------------------------------------------------------
+get_params.cgi
+Description: Obtain device setting param
+Permission: administrator
+Grammar: /get_params.cgi[?user=&pwd=]
+Return:
+
+id: Device id
+sys_ver: Firmware version
+app_ver: Webpage interfact version
+alias: alias
+now: the lapse second from 1970-1-1 0:0:0 to device current time.
+tz: device current time zoon setting and the number of seconds deviation of GMT
+daylight_saving_time: the number of seconds between Daylight Saving Time and standard time
+ntp_enable: 
+    0: prohibit 
+    ntp timing；
+    1: permit
+ntp_svr: Ntp serve
+user1_name: user1 username
+user1_pwd: user1 password
+user1_pri: user1 permission:
+    0: visitor；
+    1: operator；
+    2: administrator
+…
+user8_name: user8username
+user8_pwd: user 8 password
+user8_pri: user 8 permission
+dev2_alias: The second device alias name
+dev2_host: The second device address
+dev2_port: The second device port
+dev2_user: The second device visitor username
+dev2_pwd: The second device visitor password
+…
+dev4_alias: The fouth device alias name
+dev4_host: The fouth device address
+dev4_port: The fouth device port
+dev4_user: The fouth device visitor username
+dev4_pwd: The fouth device visitor password
+ip: ip address
+mask: Subnet mask
+gateway: Gateway
+dns: Dns serve
+dhcp_vendor: Dhcp vendor class id
+port: port
+wifi_enable:
+    0: prohibit wifi function；
+    1: permit
+wifi_ssid: Wifi ssid
+wifi_channel: reserve
+wifi_mode: reserve
+wifi_encrypt
+    0:encryption prohibit；
+    1:wep encryption
+wifi_authtype: wep Authetication:
+    0:open；
+    1:share
+wifi_keyformat: wep Key Format:
+    0:16: hexadecimal number；
+    1:ascii character
+wifi_defkey: wep Default TX Key
+wifi_key1: wep key1
+wifi_key2: wep key 2
+wifi_key3: wep key 3
+wifi_key4: wep key 4
+wifi_key1_bits: wep key 1 length:
+    0:64 bits；
+    1:128 bits
+wifi_key2_bits: wep key 2 length:
+    0:64 bits；
+    1:128 bits
+wifi_key3_bits: wep key 3 length:
+    0:64 bits；
+    1:128 bits
+wifi_key4_bits: wep key 4 length:
+    0:64 bits；
+    1:128 bits
+wifi_wpa_psk: wpa psk encryption
+wifi_country: Area setting
+    0:North american 1- 11 channel
+    1:Europe:most area of world: 1-13 channel
+    2:10-11 channel
+    3:10-13 channel
+    4:14 channel
+    5:Japan 1-14 channel
+    6:3-9 channel
+    7:5-13 channel
+pppoe_enable: 
+    0:prohibit pppoe；
+    1:permit
+pppoe_user: Pppoe dial user
+pppoe_pwd: Pppoe dial password
+upnp_enable: 
+    0:prohibit upnp port mapping；
+    1:permit
+ddns_service:
+    0:prohibit ddns service
+    1:oray.cn
+    2:DynDns.org(dyndns)
+    3:DynDns.org(statdns)
+    4:DynDns.org(custom)
+    5:reserve
+    6:reserve
+    7:reserve
+    8:3322(dyndns)
+    9:3322(statdns)
+    10:reserve
+    11:reserve
+    12:reserve
+    13:MintDNS
+    14:9299.org
+    15:easynet platform
+
+ddns_user: Ddns username
+ddns_pwd: Ddns password
+ddns_host: Ddns host
+    if service=14:like 9299.org:it is level one hostname setting
+    if service=15:like easynet platform:it is alarm url setting, for example: http://xxxx/api/alarm.aspx
+ddns_proxy_svr: if service=13/14:like MintDNS/9299.org:it is visit URL setting:
+    for example: http://www.dynddns.us/nic/update、 http://www.9299.org/upgengxin.asp
+    if service=15:like easynet platform: it is update url setting: for example http://xxxx/api/userip.aspx
+ddns_proxy_port:
+    if service=14: like 9299.org: it is mode setting
+mail_svr: Mail serve address
+mail_port: Mail serve port
+mail_tls: If use tls transport protocol,
+    0:no；
+    1:TLS；
+    2:STARTLS
+mail_user: Mail serve visit user
+mail_pwd: Mail serve visit password
+mail_sender: Mail sender
+mail_receiver1: Mail receiver1
+mail_receiver2: Mail receiver 2
+mail_receiver3: Mail receiver 3
+mail_receiver4: Mail receiver 4
+mail_inet_ip: camera inet ip chang, if send notice email or not:
+    0:no；
+    1:yes
+ftp_svr: ftp serve address
+ftp_port: ftp serve port
+ftp_user: ftp visit user
+ftp_pwd: ftp serve visit password
+ftp_dir: ftp serve upload folder
+ftp_mode:
+    0:port mode；
+    1:pasv mode
+ftp_retain:
+    0:release connection after every time upload pictures；
+    1:remain connection when upload pictures
+ftp_upload_interval: upload image interval(second):
+    0:prohibit
+ftp_filename: ftp filename save
+ftp_numberoffiles: ftp file quantity save
+ftp_schedule_enable: If use upload scheduler or not
+ftp_schedule_sun_0: Sunday upload scheduler: by 24 hours everyday,
+ftp_schedule_sun_1: by 15 minuts every hour, to divide 96 motion
+ftp_schedule_sun_2: scheduler period
+    Bit0-95:
+        0:no upload in this period；
+        1:upload in thisperiod
+ftp_schedule_mon_0:
+ftp_schedule_mon_1:
+ftp_schedule_mon_2:
+ftp_schedule_tue_0:
+ftp_schedule_tue_1:
+ftp_schedule_tue_2:
+ftp_schedule_wed_0:
+ftp_schedule_wed_1:
+ftp_schedule_wed_2:
+ftp_schedule_thu_0:
+ftp_schedule_thu_1:
+ftp_schedule_thu_2:
+ftp_schedule_fri_0:
+ftp_schedule_fri_1:
+ftp_schedule_fri_2:
+ftp_schedule_sat_0:
+ftp_schedule_sat_1:
+ftp_schedule_sat_2:
+alarm_motion_armed: 
+    0:alarm_motion_armed；
+    1:armed
+alarm_motion_sensitivity: 0-9:high-low
+alarm_motion_compensation: Enable alarm motion compensation or not when the light changes suddently:
+    0:no:
+    1:yes
+alarm_input_armed: 
+    0:alarm_input_armed；
+    1:armed
+alarm_ioin_level: alarm_ioin_level:
+    0:low；
+    1:high
+alarm_sounddetect_armed: 
+    0:alarm_sounddetect_armed；
+    1:armed
+alarm_sounddetect_sensitivity: 0-9:high-low
+alarm_iolinkage:
+    0:disable io linkage on alarm；
+    1:enable
+alarm_preset: preset linkage on alarm
+    0:disable preset linkage on alarm；
+    other:enable
+alarm_ioout_level: Io alarm_ioout_level:
+    0:low；
+    1:high
+alarm_mail 
+    0: disable sending mail on alarm；
+    1:enable
+alarm_upload_interval: alarm_upload_interval（seconds）: 0:disable
+alarm_http
+    0: diable alarm_http to inform；
+    1: enable
+alarm_http_url: alarm http url
+alarm_schedule_enable: Alarm schedule enable or not
+alarm_schedule_sun_0: Sunday alarm plan.24hours/day.
+alarm_schedule_sun_1: Divided 24hours to 96 time district,each district for 15
+alarm_schedule_sun_2: munites.
+    bit0-95:
+        0:alarm unarmed at this bit；
+        1:alarm armed at this bit
+alarm_schedule_mon_0:
+alarm_schedule_mon_1:
+alarm_schedule_mon_2:
+alarm_schedule_tue_0:
+alarm_schedule_tue_1:
+alarm_schedule_tue_2:
+alarm_schedule_wed_0:
+alarm_schedule_wed_1:
+alarm_schedule_wed_2:
+alarm_schedule_thu_0:
+alarm_schedule_thu_1:
+alarm_schedule_thu_2:
+alarm_schedule_fri_0:
+alarm_schedule_fri_1:
+alarm_schedule_fri_2:
+alarm_schedule_sat_0:
+alarm_schedule_sat_1:
+alarm_schedule_sat_2:
+decoder_baud: decoder baud
+msn_user: msn user
+msn_pwd: msn password
+msn_friend1: msn friend1
+msn_friend2: msn friend 2
+msn_friend3: msn friend 3
+msn_friend4: msn friend 4
+msn_friend5: msn friend 5
+msn_friend6: msn friend 6
+msn_friend7: msn friend 7
+msn_friend8: msn friend 8
+msn_friend9: msn friend 9
+msn_friend10: msn friend 10
+
+REPLY:
+var id='000DC5D8D726';
+var sys_ver='17.37.2.41';
+var app_ver='20.8.4.57';
+var alias='camera2';
+var now=1339401649;
+var tz=-3600;
+var daylight_saving_time=0;
+var ntp_enable=1;
+var ntp_svr='time.nist.gov';
+var user1_name='admin';
+var user1_pwd='password';
+var user1_pri=2;
+var user2_name='public';
+var user2_pwd='public';
+var user2_pri=0;
+var user3_name='user';
+var user3_pwd='user';
+var user3_pri=1;
+var user4_name='viewer';
+var user4_pwd='viewer';
+var user4_pri=0;
+var user5_name='';
+var user5_pwd='';
+var user5_pri=0;
+var user6_name='';
+var user6_pwd='';
+var user6_pri=0;
+var user7_name='';
+var user7_pwd='';
+var user7_pri=0;
+var user8_name='';
+var user8_pwd='';
+var user8_pri=0;
+var dev2_alias='';
+var dev2_host='';
+var dev2_port=0;
+var dev2_user='';
+var dev2_pwd='';
+var dev3_alias='';
+var dev3_host='';
+var dev3_port=0;
+var dev3_user='';
+var dev3_pwd='';
+var dev4_alias='';
+var dev4_host='';
+var dev4_port=0;
+var dev4_user='';
+var dev4_pwd='';
+var dev5_alias='';
+var dev5_host='';
+var dev5_port=0;
+var dev5_user='';
+var dev5_pwd='';
+var dev6_alias='';
+var dev6_host='';
+var dev6_port=0;
+var dev6_user='';
+var dev6_pwd='';
+var dev7_alias='';
+var dev7_host='';
+var dev7_port=0;
+var dev7_user='';
+var dev7_pwd='';
+var dev8_alias='';
+var dev8_host='';
+var dev8_port=0;
+var dev8_user='';
+var dev8_pwd='';
+var dev9_alias='';
+var dev9_host='';
+var dev9_port=0;
+var dev9_user='';
+var dev9_pwd='';
+var ip='192.168.0.201';
+var mask='255.255.255.0';
+var gateway='192.168.0.1';
+var dns='192.168.0.1';
+var dhcp_vendor='';
+var port=80;
+var wifi_enable=0;
+var wifi_ssid='';
+var wifi_encrypt=0;
+var wifi_defkey=0;
+var wifi_key1='';
+var wifi_key2='';
+var wifi_key3='';
+var wifi_key4='';
+var wifi_authtype=0;
+var wifi_keyformat=0;
+var wifi_key1_bits=0;
+var wifi_key2_bits=0;
+var wifi_key3_bits=0;
+var wifi_key4_bits=0;
+var wifi_mode=0;
+var wifi_wpa_psk='';
+var pppoe_enable=0;
+var pppoe_user='';
+var pppoe_pwd='';
+var upnp_enable=0;
+var ddns_service=12;
+var ddns_user='f3318';
+var ddns_pwd='333';
+var ddns_host='/vipddns/upgengxin.asp';
+var ddns_proxy_svr='www.apexisip.com';
+var ddns_proxy_port=80;
+var mail_svr='';
+var mail_port=0;
+var mail_tls=0;
+var mail_user='';
+var mail_pwd='';
+var mail_sender='';
+var mail_receiver1='';
+var mail_receiver2='';
+var mail_receiver3='';
+var mail_receiver4='';
+var mail_inet_ip=0;
+var ftp_svr='';
+var ftp_port=0;
+var ftp_user='';
+var ftp_pwd='';
+var ftp_dir='';
+var ftp_mode=0;
+var ftp_upload_interval=0;
+var ftp_filename='';
+var ftp_numberoffiles=0;
+var ftp_schedule_enable=0;
+var ftp_schedule_sun_0=0;
+var ftp_schedule_sun_1=0;
+var ftp_schedule_sun_2=0;
+var ftp_schedule_mon_0=0;
+var ftp_schedule_mon_1=0;
+var ftp_schedule_mon_2=0;
+var ftp_schedule_tue_0=0;
+var ftp_schedule_tue_1=0;
+var ftp_schedule_tue_2=0;
+var ftp_schedule_wed_0=0;
+var ftp_schedule_wed_1=0;
+var ftp_schedule_wed_2=0;
+var ftp_schedule_thu_0=0;
+var ftp_schedule_thu_1=0;
+var ftp_schedule_thu_2=0;
+var ftp_schedule_fri_0=0;
+var ftp_schedule_fri_1=0;
+var ftp_schedule_fri_2=0;
+var ftp_schedule_sat_0=0;
+var ftp_schedule_sat_1=0;
+var ftp_schedule_sat_2=0;
+var alarm_motion_armed=0;
+var alarm_motion_sensitivity=5;
+var alarm_motion_compensation=0;
+var alarm_input_armed=0;
+var alarm_ioin_level=0;
+var alarm_sounddetect_armed=0;
+var alarm_sounddetect_sensitivity=5;
+var alarm_iolinkage=0;
+var alarm_preset=0;
+var alarm_ioout_level=0;
+var alarm_mail=0;
+var alarm_upload_interval=0;
+var alarm_http=0;
+var alarm_msn=0;
+var alarm_http_url='';
+var alarm_schedule_enable=0;
+var alarm_schedule_sun_0=0;
+var alarm_schedule_sun_1=0;
+var alarm_schedule_sun_2=0;
+var alarm_schedule_mon_0=0;
+var alarm_schedule_mon_1=0;
+var alarm_schedule_mon_2=0;
+var alarm_schedule_tue_0=0;
+var alarm_schedule_tue_1=0;
+var alarm_schedule_tue_2=0;
+var alarm_schedule_wed_0=0;
+var alarm_schedule_wed_1=0;
+var alarm_schedule_wed_2=0;
+var alarm_schedule_thu_0=0;
+var alarm_schedule_thu_1=0;
+var alarm_schedule_thu_2=0;
+var alarm_schedule_fri_0=0;
+var alarm_schedule_fri_1=0;
+var alarm_schedule_fri_2=0;
+var alarm_schedule_sat_0=0;
+var alarm_schedule_sat_1=0;
+var alarm_schedule_sat_2=0;
+var decoder_baud=12;
+var msn_user='';
+var msn_pwd='';
+var msn_friend1='';
+var msn_friend2='';
+var msn_friend3='';
+var msn_friend4='';
+var msn_friend5='';
+var msn_friend6='';
+var msn_friend7='';
+var msn_friend8='';
+var msn_friend9='';
+var msn_friend10='';
+
+
+Misc Einstellungen:
+----------------------------------------------------------------------------
+set_misc.cgi
+description:set misc parameters of camera
+permission:administrator
+syntax:/set_misc.cgi?[led_mode=&ptz_center_onstart=&ptz_auto_patrol_interval=&ptz_auto_
+patrol_type=&ptz_patrol_h_rounds=&ptz_patrol_v_rounds=&ptz_disable_preset=&ptz_pre
+set_onstart&user=&pwd=&next_url=]
+parameter:
+    led_mode:
+        0:mode1；
+        1:mode2；
+        2:shut off the led
+    ptz_center_onstart:=1:ptz_center_onstart
+    ptz_auto_patrol_interval: ptz_auto_patrol_interva:=0:no auto rotating
+    ptz_auto_patrol_type:
+        0:no rotate；
+        1:horizontal；
+        2:vertical；
+        3:horizontal + vertical
+ptz_patrol_h_rounds:   ptz_patrol_h_rounds: 0:infinite
+ptz_patrol_v_rounds: ptz_patrol_v_rounds: 0:infinite
+ptz_patrol_rate: ptz_patrol_rate: 0-100: 0:the fastest 
+ptz_patrol_up_rate: ptz_patrol_up_rate:0-100: 0:the slowest 
+ptz_patrol_down_rate: ptz_patrol_down_rate:0-100: 0:the slowest 
+ptz_patrol_left_rate: ptz_patrol_left_rate:0-100: 0:the slowest
+ptz_patrol_right_rate: ptz_patrol_right_rate:0-100: 0:the slowest
+ptz_disable_preset: ptz_disable_preset
+    0: no；
+    1: yes （take effect after reboot）
+ptz_preset_onstart:ptz_preset_onstart: 0:disable
+
+get_misc.cgi
+description: obtain misc parameters of camera
+permission: administrator
+syntax: /get_misc.cgi[?user=&pwd=]
+return: see get_misc.cgi
+
+RESULT:
+var led_mode=2;
+var ptz_center_onstart=0;
+var ptz_auto_patrol_interval=0;
+var ptz_auto_patrol_type=0;
+var ptz_patrol_h_rounds=0;
+var ptz_patrol_v_rounds=0;
+var ptz_patrol_rate=10;
+var ptz_patrol_up_rate=10;
+var ptz_patrol_down_rate=10;
+var ptz_patrol_left_rate=10;
+var ptz_patrol_right_rate=5;
+var ptz_disable_preset=0;
+var ptz_preset_onstart=0;
+
+
+Results auswerten (python):
+----------------------------------------------------------------------------
+
+import re
+import urrlib
+
+uf = urllib.urlopen(getparamsurl)
+result = re.findall(r'var\s+([a-zA-Z_][a-zA-Z_0-9]*)\s*=\s*(.*);', uf.read())
+--> result ist ein array mit key/value pairs
+
+import re
+import urllib
+
+class Camera:
+    def __init__(self):
+        self.baseurl = 'http://jahnke.homelinux.net:10802/'
+        self.getparamsurl = self.baseurl + 'get_misc.cgi?user=admin&pwd=password'
+
+
+    def getParam(self, param):
+        for tuple in self.params:
+            if tuple[0] == param:
+                return tuple[1]
+        return 0
+
+    def getParams(self):
+        uf = urllib.urlopen(self.getparamsurl)
+        self.params = re.findall(r'var\s+([a-zA-Z_][a-zA-Z_0-9]*)\s*=\s*(.*);', uf.read())
+        # --> result ist ein array mit key/value pairs
+        return self.params
+
+
+
+
+
+
+
+
