@@ -10,6 +10,7 @@ import Views.schemaView
 import Controller.actionController
 import Controller.schemaController
 import logging, logging.config
+import Services.k8090
 
 class VOD(object):       
 	def __init__(self):

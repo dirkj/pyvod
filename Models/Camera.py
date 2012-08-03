@@ -87,11 +87,17 @@ class Camera (object):
 	def getConfigs(self):
 		if not self.configsCached:
 			getparamsurl = self.baseurl + self.config.get('camera','command.getconfig') + '?' + self.userpwd_urlpar
-			uf = urllib2.urlopen(getparamsurl, timeout=self.timeout)
-			self.configs = re.findall(r'var\s+([a-zA-Z_][a-zA-Z_0-9]*)\s*=\s*(.*);', uf.read())
-			uf.close()
-			# --> result ist ein array mit key/value pairs
-			self.log.info('Got fresh configs from camera')
+			try:
+				uf = urllib2.urlopen(getparamsurl, timeout=self.timeout)
+			except urllib2.URLError, (err):
+				print "getConfigs: URL error(%s) while trying %s" % (err, getparamsurl)
+				self.configs = []
+			else:
+				self.configs = re.findall(r'var\s+([a-zA-Z_][a-zA-Z_0-9]*)\s*=\s*(.*);', uf.read())
+				uf.close()
+				# --> result ist ein array mit key/value pairs
+				self.log.info('Got fresh configs from camera')
+				self.configsCached = True
 		return self.configs
 
 	def getConfig(self, param):
@@ -100,6 +106,7 @@ class Camera (object):
 			if tuple[0] == param:
 				self.log.debug('Camera.getConfig(' + param + ')=' + tuple[1])
 				return tuple[1]
+		self.log.debug('Camera.getConfig(' + param + '): No configuration found for this parameter')
 		return 0
 
 	def getExtParams(self):
@@ -110,6 +117,7 @@ class Camera (object):
 			uf.close()
 			# --> result ist ein array mit key/value pairs
 			self.log.info('Got fresh ext-params from camera')
+			self.extParamsCached = True
 		return self.extParams
 
 	def getExtParam(self, param):
