@@ -15,11 +15,17 @@ class Config (object):
    self.configfile = configfile
    self.config.read(configfile)
 
- def get(self, section, param):
-  return self.config.get(section, param)
+ def get(self, section, param, default=None):
+  if self.config.has_option(section, param):
+   return self.config.get(section, param)
+  else:
+   return default
 
- def getint(self, section, param):
-  return self.config.getint(section, param)
+ def getint(self, section, param, default=None):
+  if self.config.has_option(section, param):
+   return self.config.getint(section, param)
+  else:
+   return default
 
 if __name__ == "__main__":
  c1 = Config()

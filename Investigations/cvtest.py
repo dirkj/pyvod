@@ -4,20 +4,20 @@
 
 from Tkinter import *
 import time
-import Utils.Config
+#import Utils.Config
 #import Views.vodView
 #import Views.schemaView
 #import Controller.actionController
 #import Controller.schemaController
-import logging, logging.config
+#import logging, logging.config
 
 import cv2.cv as cv #Import functions from OpenCV
 
 class VOD(object):       
 	def __init__(self):
-		logging.config.fileConfig('Resources/vodlog.conf')
-		self.log = logging.getLogger(__name__)
-		self.log.info("starting application ...")
+		#logging.config.fileConfig('Resources/vodlog.conf')
+		#self.log = logging.getLogger(__name__)
+		#self.log.info("starting application ...")
 		#self.config = Utils.Config.Config();
 
 		#self.root = Tk()
