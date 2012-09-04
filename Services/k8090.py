@@ -41,11 +41,11 @@ class K8090 (object):
 		self.baudrate = self.config.getint('k8090', 'baudrate',19200)
 		self.timeout = self.config.getint('k8090', 'timeout',10)
 		paritySupported = {
-			"PARITY_NONE"   : serial.PARITY_NONE,
-			"PARITY_EVEN"      : serial.PARITY_EVEN,
+			"PARITY_NONE": serial.PARITY_NONE,
+			"PARITY_EVEN": serial.PARITY_EVEN,
 			"PARITY_ODD": serial.PARITY_ODD,
-			"PARITY_MARK"   : serial.PARITY_MARK
-			"PARITY_SPACE" : serial.PARITY_SPACE }
+			"PARITY_MARK": serial.PARITY_MARK,
+			"PARITY_SPACE": serial.PARITY_SPACE }
 		self.parity = paritySupported[self.config.get('k8090', 'parity', 'PARITY_NONE')]
 		# self.stopbits = self.config.get('k8090', 'stopbits')
 		self.serial = serial.Serial(port=self.port, baudrate=self.baudrate, timeout=self.timeout, parity=self.parity)
@@ -84,8 +84,8 @@ class K8090CommandThread(threading.Thread):
 
 	def twosComplement(self, stringToBuildComplements):
 		twosComplement = 0
-		for c in stringToBuildComplements
-			twosComplement += c
+		for c in stringToBuildComplements:
+			twosComplement += ord(c)
 		return ~twosComplement + 1
 		
 	def run(self):
@@ -111,12 +111,15 @@ class K8090EventThread():
 	def run(self):
 		while True:
 			receivedEvent = ''
-			while (charReceived = self.serial.read()) != '\x04': # wait for STX
+			charReceived = self.serial.read()
+			while charReceived != '\x04': # wait for STX
 				this.log.debug("ignoring character (%d) from K8090 while waiting for STX" % charReceived)
+				charReceived = self.serial.read()
 			checksum = 4 # STX	
-			while (charReceived = self.serial.read()) != '\x0F': # wait for ETX
+			charReceived = self.serial.read()
+			while charReceived != '\x0F': # wait for ETX
 				receivedEvent = receivedEvent + chr(charReceived)
-				checksum += charReceived
+				checksum += ord(charReceived)
 			
 			# event interpretation
 			if len(receivedEvent) != 5:
@@ -129,7 +132,7 @@ class K8090EventThread():
 				# senderChecksum = receivedEvent[4]
 				
 				if checksum != 0:
-					log.error("Received message with invalid checksum! (event=%d, mask=%d, p1=%d, p2=%d) % (event, mask, param1, param2))
+					log.error("Received message with invalid checksum! (event=%d, mask=%d, p1=%d, p2=%d)" % (event, mask, param1, param2))
 
 				if event == this.k8090.BUTTON_MODE:
 					for subscriber in self.eventSubscriptions:
@@ -142,14 +145,14 @@ class K8090EventThread():
 					for subscriber in self.eventSubscriptions:
 						relayEvent = event + '_' + chr(ord('0') + relay)
 						if subscriber["event"] == event or subscriber["event"] == relayEvent:
-							subscriber["queue"].add({"event" : subscriber["event"], "relay" : relay, "delay" : delay)
+							subscriber["queue"].add({"event" : subscriber["event"], "relay" : relay, "delay" : delay})
 							
 				if event == this.k8090.BUTTON_STATUS:
 					for subscriber in self.eventSubscriptions:
 						if subscriber["event"] == event:
 							subscriber["queue"].add({"event" : event, "currentState" : mask, "pressedEvent" : param1, "releasedEvent" : param2})
 					allEvents = pressedEvent | releasedEvent
-					for relay in range(1..8):
+					for relay in range(1,8):
 						relayEvent = event + '_' + chr(ord('0') + relay)
 						relayMask = RelayMappingNumberToMask[relay]
 						if (allEvents & relayMask != 0) and subscriber["event"] == relayEvent:
@@ -163,7 +166,7 @@ class K8090EventThread():
 				elif event == this.k8090.JUMPER_STATUS:
 					for subscriber in self.eventSubscriptions:
 						if subscriber["event"] == event:
-							subscriber["queue"].add({"event" : event, "set" : True if param1 > 1 Else False})
+							subscriber["queue"].add({"event" : event, "set" : True if param1 > 1 else False})
 							
 				elif event == this.k8090.FIRMWARE_VERSION:
 					for subscriber in self.eventSubscriptions:
