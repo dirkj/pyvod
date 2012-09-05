@@ -142,7 +142,10 @@ class Camera (object):
 
 	def moveCamera(self, moveCommand, param=None):
 		cmd_format = self.config.get('camera',moveCommand)
-		cmd = cmd_format % param
+		if param is None:
+			cmd = cmd_format
+		else:
+			cmd = cmd_format % param
 		uf = urllib2.urlopen(self.baseurl + cmd + '&' + self.userpwd_urlpar, timeout=self.timeout)
 		uf.close()
 		self.log.debug("moveCamera - moveCommand=%s" % moveCommand)
